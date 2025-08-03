@@ -1,0 +1,129 @@
+﻿@model Employee
+
+@{
+    ViewBag.Title = "Create Employee";
+}
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+     <h4 class="form-heading">Employee Details</h4>
+
+    <div>
+        <label asp-for="EmployeeName">Employee Name:</label>
+        <input asp-for="EmployeeName" type="text" class="form-control" />
+        <span asp-validation-for="EmployeeName" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Address">Address:</label>
+        <input asp-for="Address" type="text" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="Email">Email:</label>
+        <input asp-for="Email" type="email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="PhoneNo">Phone No:</label>
+        <input asp-for="PhoneNo" type="text" class="form-control" />
+        <span asp-validation-for="PhoneNo" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Photo:</label>
+        <input type="file" name="ImageFile" accept="image/*" class="form-control" />
+        <span asp-validation-for="Photo" class="text-danger"></span>
+    </div>
+
+
+    <br />
+    <fieldset>
+        <legend>Enter Qualification</legend>
+
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" id="degree" class="form-control" placeholder="Degree" />
+            </div>
+            <div class="col-md-2">
+                <input type="number"  id="percentage" class="form-control" placeholder="Percentage" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="year" class="form-control" placeholder="Year" />
+            </div>
+            <div class="col-md-2">
+                <input type="text" id="grade" class="form-control" placeholder="Grade" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="addQualification" class="btn btn-success">Add Qualification</button>
+            </div>
+        </div>
+    </fieldset>
+
+    <br />
+
+    <table class="table table-bordered" id="qualificationDisplayTable">
+        <thead>
+            <tr>
+                <th>Degree</th>
+                <th>Percentage</th>
+                <th>Year</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+
+    <div id="hiddenQualifications"></div>
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">Submit All</button>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        let qualificationIndex = 0;
+
+        $('#addQualification').click(function () {
+            const degree = $('#degree').val();
+            const percentage = $('#percentage').val();
+            const year = $('#year').val();
+            const grade = $('#grade').val();
+
+            if (!degree || !percentage || !year || !grade) {
+                alert("Please fill all qualification fields.");
+                return;
+            }
+
+            $('#qualificationDisplayTable tbody').append(`
+                        <tr>
+                            <td>${degree}</td>
+                            <td>${percentage}</td>
+                            <td>${year}</td>
+                            <td>${grade}</td>
+                        </tr>
+                    `);
+
+        
+            $('#hiddenQualifications').append(`
+                        <input type="hidden" name="Qualifications[${qualificationIndex}].Degree" value="${degree}" />
+                        <input type="hidden" name="Qualifications[${qualificationIndex}].Percentage" value="${percentage}" />
+                        <input type="hidden" name="Qualifications[${qualificationIndex}].Year" value="${year}" />
+                        <input type="hidden" name="Qualifications[${qualificationIndex}].Grade" value="${grade}" />
+                    `);
+
+            qualificationIndex++;
+
+        
+            $('#degree').val('');
+            $('#percentage').val('');
+            $('#year').val('');
+            $('#grade').val('');
+        });
+    </script>
+}
